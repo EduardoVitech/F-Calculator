@@ -13,8 +13,13 @@ class Memory {
   String? _operation;
   String _value = '0';
   bool _wipeValue = false;
+  String? _lastComand;
 
   void applyComand(String comand) {
+    if (_isReplacingOperation(comand)) {
+      _operation = comand;
+      return;
+    }
     if (comand == 'AC') {
       _allClear();
     } else if (operations.contains(comand)) {
@@ -22,6 +27,15 @@ class Memory {
     } else {
       _addDigit(comand);
     }
+
+    _lastComand = comand;
+  }
+
+  _isReplacingOperation(String comand) {
+    return operations.contains(_lastComand) &&
+        operations.contains(comand) &&
+        _lastComand != '=' &&
+        comand != '=';
   }
 
   _setOperation(String newOperation) {
